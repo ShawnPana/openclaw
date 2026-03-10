@@ -221,7 +221,7 @@ proxies.
     enabled: true,
     defaultProfile: "browseruse",
     remoteCdpTimeoutMs: 5000,
-    remoteCdpHandshakeTimeoutMs: 15000,
+    remoteCdpHandshakeTimeoutMs: 8000,
     profiles: {
       browseruse: {
         // All Browser Use session params can be added as query params.
