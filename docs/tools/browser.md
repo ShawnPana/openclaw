@@ -226,7 +226,7 @@ proxies.
       browseruse: {
         // All Browser Use session params can be added as query params.
         // See: https://docs.browser-use.com/cloud/api-v2/browsers/create-browser-session
-        cdpUrl: "wss://connect.browser-use.com?apiKey=<BROWSER_USE_API_KEY>&timeout=240&profileId=<PROFILE_ID>&proxyCountryCode=us",
+        cdpUrl: "wss://connect.browser-use.com?apiKey=<BROWSER_USE_API_KEY>&timeout=240&proxyCountryCode=us",
         color: "#ff750e",
       },
     },
