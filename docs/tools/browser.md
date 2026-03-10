@@ -226,7 +226,7 @@ proxies.
       browseruse: {
         // All Browser Use session params can be added as query params.
         // See: https://docs.browser-use.com/cloud/api-v2/browsers/create-browser-session
-        cdpUrl: "wss://connect.browser-use.com?apiKey=<BROWSER_USE_API_KEY>&timeout=240&proxyCountryCode=us",
+        cdpUrl: "wss://connect.browser-use.com?apiKey=<BROWSER_USE_API_KEY>&timeout=240&profileId=<PROFILE_ID>&proxyCountryCode=us",
         color: "#ff750e",
       },
     },
@@ -239,6 +239,8 @@ Notes:
 - [Sign up](https://www.browser-use.com) and copy your **API Key** from the
   dashboard.
 - Replace `<BROWSER_USE_API_KEY>` with your real Browser Use API key.
+- Replace `<PROFILE_ID>` with a persistent profile ID, or remove the
+  `profileId` param if you don't need profile persistence.
 - All [Browser Use session parameters](https://docs.browser-use.com/cloud/api-v2/browsers/create-browser-session)
   (timeout, profileId, proxyCountryCode, screen size, custom proxy, etc.)
   are passed as query params in the `cdpUrl`.
