@@ -62,10 +62,11 @@ export function createProfileAvailability({
     });
 
   const isReachable = async (timeoutMs?: number) => {
-    // For direct WebSocket endpoints (e.g. Browser Use), each raw CDP health check
-    // opens a new WebSocket which may provision a new browser session. Check the
-    // cached Playwright connection instead — it reflects the actual connection state.
-    if (isWebSocketUrl(profile.cdpUrl)) {
+    // For remote WebSocket endpoints (e.g. Browser Use, Browserbase), each raw CDP
+    // health check opens a new WebSocket which may provision a new browser session.
+    // Check the cached Playwright connection instead — it reflects the actual state.
+    // Loopback ws:// profiles are locally-managed and use normal HTTP-based probes.
+    if (capabilities.isRemote && isWebSocketUrl(profile.cdpUrl)) {
       return hasActivePlaywrightConnection(profile.cdpUrl);
     }
     const { httpTimeoutMs, wsTimeoutMs } = resolveTimeouts(timeoutMs);
@@ -73,7 +74,7 @@ export function createProfileAvailability({
   };
 
   const isHttpReachable = async (timeoutMs?: number) => {
-    if (isWebSocketUrl(profile.cdpUrl)) {
+    if (capabilities.isRemote && isWebSocketUrl(profile.cdpUrl)) {
       return hasActivePlaywrightConnection(profile.cdpUrl);
     }
     const { httpTimeoutMs } = resolveTimeouts(timeoutMs);
@@ -180,10 +181,11 @@ export function createProfileAvailability({
     }
 
     if (!httpReachable) {
-      // Direct WebSocket endpoints (e.g. Browser Use) are on-demand — no need to probe
+      // Remote WebSocket endpoints (e.g. Browser Use) are on-demand — no need to probe
       // reachability up front. The Playwright connection is established lazily in
       // connectBrowser when a tab operation actually needs it.
-      if (isWebSocketUrl(profile.cdpUrl)) {
+      // Loopback ws:// profiles still need the normal launch/attach flow below.
+      if (capabilities.isRemote && isWebSocketUrl(profile.cdpUrl)) {
         return;
       }
       if ((attachOnly || remoteCdp) && opts.onEnsureAttachTarget) {
@@ -255,9 +257,9 @@ export function createProfileAvailability({
 
   const stopRunningBrowser = async (): Promise<{ stopped: boolean }> => {
     await reconcileProfileRuntime();
-    // For direct WebSocket endpoints (e.g. Browser Use), there's no local Chrome process
+    // For remote WebSocket endpoints (e.g. Browser Use), there's no local Chrome process
     // to stop. Instead, close the cached Playwright connection to the cloud provider.
-    if (isWebSocketUrl(profile.cdpUrl)) {
+    if (capabilities.isRemote && isWebSocketUrl(profile.cdpUrl)) {
       await closePlaywrightBrowserConnection({ cdpUrl: profile.cdpUrl });
       return { stopped: true };
     }
