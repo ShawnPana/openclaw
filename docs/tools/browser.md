@@ -219,8 +219,8 @@ Set up a [Browser Use](https://cloud.browser-use.com) cloud browser profile with
   browser: {
     enabled: true,
     defaultProfile: "browseruse",
-    remoteCdpTimeoutMs: 5000,
-    remoteCdpHandshakeTimeoutMs: 8000,
+    remoteCdpTimeoutMs: 3000,
+    remoteCdpHandshakeTimeoutMs: 5000,
     profiles: {
       browseruse: {
         // All Browser Use session params can be added as query params.
