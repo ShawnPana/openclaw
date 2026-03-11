@@ -17,7 +17,7 @@ import {
   stopChromeExtensionRelayServer,
 } from "./extension-relay.js";
 import { getBrowserProfileCapabilities } from "./profile-capabilities.js";
-import { hasActivePlaywrightConnection } from "./pw-session.js";
+import { closePlaywrightBrowserConnection, hasActivePlaywrightConnection } from "./pw-session.js";
 import {
   CDP_READY_AFTER_LAUNCH_MAX_TIMEOUT_MS,
   CDP_READY_AFTER_LAUNCH_MIN_TIMEOUT_MS,
@@ -258,7 +258,6 @@ export function createProfileAvailability({
     // For direct WebSocket endpoints (e.g. Browser Use), there's no local Chrome process
     // to stop. Instead, close the cached Playwright connection to the cloud provider.
     if (isWebSocketUrl(profile.cdpUrl)) {
-      const { closePlaywrightBrowserConnection } = await import("./pw-session.js");
       await closePlaywrightBrowserConnection({ cdpUrl: profile.cdpUrl });
       return { stopped: true };
     }
